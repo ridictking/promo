@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: __containername__
+  name: __containername__
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: __containername__
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        run: __containername__
+    spec:
+      containers:
+      - image: acrsercomcloud.azurecr.io/nationalgiftcard:108
+        imagePullPolicy: IfNotPresent
+        name: __containername__
+        envFrom:
+          - configMapRef:
+              name: __configname__
+        resources: {}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
